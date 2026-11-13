@@ -1,6 +1,8 @@
 # decadriver/ holds the Decawave driver, which is not in this repository
 # (see decadriver/README.md). port/ is the platform layer that the driver calls.
-if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/decadriver/deca_device.c")
+# Not in the early expansion: a project that does not use this component, such
+# as the host tests, must build without the driver.
+if(NOT CMAKE_BUILD_EARLY_EXPANSION AND NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/decadriver/deca_device.c")
     message(FATAL_ERROR "DW1000 driver not found. Read ${CMAKE_CURRENT_LIST_DIR}/decadriver/README.md")
 endif()
 
