@@ -1,0 +1,26 @@
+# ESP-IDF
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+
+# Python
+__pycache__/
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+
+# C coverage
+*.gcda
+*.gcno
+coverage/
+
+# ROS 2 (colcon)
+install/
+log/
+
+# Editors and local settings
+.vscode/
+.claude/settings.local.json
