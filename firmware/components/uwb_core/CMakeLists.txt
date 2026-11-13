@@ -2,3 +2,6 @@
 # its tests run on the host (see host_test/).
 idf_component_register(SRCS "spi_unskew.c"
                        INCLUDE_DIRS "include")
+
+# GCC static analysis. This component is small, so the build time is short.
+target_compile_options(${COMPONENT_LIB} PRIVATE -fanalyzer)
