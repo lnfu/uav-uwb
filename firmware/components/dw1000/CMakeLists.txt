@@ -9,4 +9,4 @@ idf_component_register(
          "decadriver/deca_params_init.c"
          "port/dw1000_port.c"
     INCLUDE_DIRS "decadriver" "port"
-    PRIV_REQUIRES esp_driver_spi esp_driver_gpio)
+    PRIV_REQUIRES esp_driver_spi esp_driver_gpio uwb_core)

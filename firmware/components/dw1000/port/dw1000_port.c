@@ -10,9 +10,10 @@
 #include "esp_attr.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "spi_unskew.h"
 
 // Mode 3; reads arrive one bit early because the S3 samples MISO half a
-// cycle late. readfromspi() shifts reads back by one bit; writes need no fix.
+// cycle late. readfromspi() corrects reads with spi_unskew(); writes need no fix.
 #define DW_SPI_MODE 3
 #define DW_SPI_HOST SPI2_HOST
 
@@ -101,10 +102,8 @@ int readfromspi(uint16 headerLength, const uint8 *headerBuffer, uint32 readlengt
         memset(s_tx, 0, n);  // MOSI low while reading, as dwt_spicswakeup() expects
         readlength -= n;
         xfer_chunk(n, readlength == 0);
-        for (size_t i = 0; i < n; i++) {
-            *readBuffer++ = (uint8_t)((prev << 7) | (s_rx[i] >> 1));
-            prev = s_rx[i];
-        }
+        prev = spi_unskew(prev, s_rx, readBuffer, n);
+        readBuffer += n;
     }
     spi_device_release_bus(s_dev);
     return 0;
