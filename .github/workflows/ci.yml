@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: j178/prek-action@v3.1.0
+
+  host-test:
+    runs-on: ubuntu-latest
+    container: espressif/idf:v6.1
+    defaults:
+      run:
+        shell: bash
+        working-directory: firmware/components/uwb_core/host_test
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install tools
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          apt-get update
+          apt-get install -y --no-install-recommends libbsd-dev lcov
+          . $IDF_PATH/export.sh
+          pip install clang-tidy==21.1.6
+
+      - name: Build
+        run: |
+          . $IDF_PATH/export.sh
+          idf.py build
+
+      - name: Test
+        run: build/uwb_core_host_test.elf
+
+      - name: clang-tidy
+        run: |
+          . $IDF_PATH/export.sh
+          ./clang_tidy.sh
+
+      - name: Coverage
+        run: |
+          lcov --capture --directory build --output-file build/coverage.info \
+            --include "$GITHUB_WORKSPACE/firmware/components/uwb_core/*.c" \
+            --exclude "*/host_test/*"
+          lcov --summary build/coverage.info
