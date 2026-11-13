@@ -1,0 +1,3 @@
+# The tests use rand() with a constant seed, so a failure occurs again
+InheritParentConfig: true
+Checks: '-cert-msc30-c,-cert-msc32-c,-cert-msc50-cpp,-cert-msc51-cpp'
