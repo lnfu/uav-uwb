@@ -22,3 +22,34 @@ Install the Git hooks:
 ```sh
 prek install
 ```
+
+## Build and run
+
+Get the DW1000 driver first. Refer to
+[`firmware/components/dw1000/decadriver/README.md`](firmware/components/dw1000/decadriver/README.md).
+
+Start a shell with the ESP-IDF environment:
+
+```sh
+eim shell
+cd firmware
+```
+
+Connect a board. Find its port name and set `PORT`:
+
+```sh
+ls /dev/serial/by-id/
+PORT=/dev/serial/by-id/<port name>
+```
+
+Build the firmware, write it to the board, and show the output:
+
+```sh
+idf.py -p $PORT flash
+idf.py -p $PORT monitor --no-reset
+```
+
+Push `Ctrl+]` to stop the monitor.
+
+If the monitor shows no output, refer to
+[`docs/troubleshooting.md`](docs/troubleshooting.md).
