@@ -24,3 +24,7 @@ log/
 # Editors and local settings
 .vscode/
 .claude/settings.local.json
+
+# Decawave DW1000 driver: not in this repository (see the README there)
+firmware/components/dw1000/decadriver/*
+!firmware/components/dw1000/decadriver/README.md
